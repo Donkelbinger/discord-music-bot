@@ -14,42 +14,15 @@ images:
     newName: registry.mentalsj.uk/discord-music-bot
     newTag: latest
 
-# Add configurations for the parameters
-configMapGenerator:
-  - name: bot-parameters
-    behavior: merge
-    literals:
-      - DISCORD_TOKEN=${DISCORD_TOKEN}
-      - REGISTRY_USERNAME=${REGISTRY_USERNAME}
-      - REGISTRY_PASSWORD=${REGISTRY_PASSWORD}
-      - REGISTRY_AUTH=${REGISTRY_AUTH}
+generatorOptions:
+  disableNameSuffixHash: true
 
-vars:
-  - name: DISCORD_TOKEN
-    objref:
-      kind: ConfigMap
-      name: bot-parameters
-      apiVersion: v1
-    fieldref:
-      fieldpath: data.DISCORD_TOKEN
-  - name: REGISTRY_USERNAME
-    objref:
-      kind: ConfigMap
-      name: bot-parameters
-      apiVersion: v1
-    fieldref:
-      fieldpath: data.REGISTRY_USERNAME
-  - name: REGISTRY_PASSWORD
-    objref:
-      kind: ConfigMap
-      name: bot-parameters
-      apiVersion: v1
-    fieldref:
-      fieldpath: data.REGISTRY_PASSWORD
-  - name: REGISTRY_AUTH
-    objref:
-      kind: ConfigMap
-      name: bot-parameters
-      apiVersion: v1
-    fieldref:
-      fieldpath: data.REGISTRY_AUTH 
+secretGenerator:
+  - name: discord-bot-secret
+    type: Opaque
+    literals:
+      - token=$(discord.token)
+  - name: registry-credentials
+    type: kubernetes.io/dockerconfigjson
+    literals:
+      - .dockerconfigjson={"auths":{"registry.mentalsj.uk":{"username":"$(registry.username)","password":"$(registry.password)","auth":"$(echo -n "$(registry.username):$(registry.password)" | base64)"}}} 

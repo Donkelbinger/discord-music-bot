@@ -9,18 +9,17 @@ spec:
     repoURL: https://your-git-repo-url.git
     targetRevision: HEAD
     path: discord-music-bot/kustomization-2
+    helm:
+      parameters:
+        - name: discord.token
+          value: ""
+        - name: registry.username
+          value: ""
+        - name: registry.password
+          value: ""
     kustomize:
       images:
         - registry.mentalsj.uk/discord-music-bot:latest
-      parameters:
-        - name: DISCORD_TOKEN
-          value: $DISCORD_TOKEN
-        - name: REGISTRY_USERNAME
-          value: $REGISTRY_USERNAME
-        - name: REGISTRY_PASSWORD
-          value: $REGISTRY_PASSWORD
-        - name: REGISTRY_AUTH
-          value: $REGISTRY_AUTH
   destination:
     server: https://kubernetes.default.svc
     namespace: discord-bot
