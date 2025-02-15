@@ -16,7 +16,6 @@ images:
 
 registry-secret:
   name: registry-credentials
-  namespace: max-bot
-  type: kubernetes.io/dockerconfigjson
-  data:
-    .dockerconfigjson: $registry-credentials
+  username: test
+  password: test
+
