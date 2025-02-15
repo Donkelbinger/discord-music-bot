@@ -15,7 +15,7 @@ images:
     newTag: latest
 
 registry-secret:
-  name: registry-credentials
-  username: test
-  password: test
+  - name: registry-credentials
+    username: test
+    password: test
 
