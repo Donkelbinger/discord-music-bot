@@ -12,11 +12,6 @@ spec:
     helm:
       values: |
         discordToken: ""
-        registry:
-          server: ""
-          username: ""
-          password: ""
-          email: ""
   destination:
     server: https://kubernetes.default.svc
     namespace: discord-bot

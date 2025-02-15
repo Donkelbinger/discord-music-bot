@@ -2,16 +2,11 @@
 replicaCount: 1
 
 image:
-  repository: ""
+  repository: ghcr.io/donkelbinger/discord-music-bot
   tag: latest
   pullPolicy: Always
 
 discordToken: ""
 
-registry:
-  server: ""
-  username: ""
-  password: ""
-  email: ""
 nameOverride: ""
 fullnameOverride: "" 
