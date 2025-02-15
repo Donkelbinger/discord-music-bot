@@ -9,13 +9,13 @@ spec:
     repoURL: https://your-git-repo-url.git
     targetRevision: HEAD
     path: discord-music-bot/kustomization-2
-    helm:
-      parameters:
-        - name: discord.token
+    plugin:
+      env:
+        - name: DISCORD_TOKEN
           value: ""
-        - name: registry.username
+        - name: REGISTRY_USERNAME
           value: ""
-        - name: registry.password
+        - name: REGISTRY_PASSWORD
           value: ""
     kustomize:
       images:

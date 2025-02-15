@@ -6,7 +6,6 @@ namespace: discord-bot
 resources:
   - namespace.yaml
   - deployment.yaml
-  - secret.yaml
 
 # Placeholder that will be replaced by ArgoCD
 images:
@@ -20,9 +19,9 @@ generatorOptions:
 secretGenerator:
   - name: discord-bot-secret
     type: Opaque
-    literals:
-      - token=$(discord.token)
+    envs:
+      - .env.secret
   - name: registry-credentials
     type: kubernetes.io/dockerconfigjson
-    literals:
-      - .dockerconfigjson={"auths":{"registry.mentalsj.uk":{"username":"$(registry.username)","password":"$(registry.password)","auth":"$(echo -n "$(registry.username):$(registry.password)" | base64)"}}} 
+    envs:
+      - .env.registry 
