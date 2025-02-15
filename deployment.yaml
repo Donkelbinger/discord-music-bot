@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discord-music-bot
+  namespace: discord-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: discord-music-bot
+  template:
+    metadata:
+      labels:
+        app: discord-music-bot
+    spec:
+      imagePullSecrets:
+        - name: registry-credentials
+      containers:
+      - name: discord-music-bot
+        image: your-registry.com/discord-music-bot:latest
+        imagePullPolicy: Always
+        env:
+        - name: DISCORD_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: discord-bot-secret
+              key: token 

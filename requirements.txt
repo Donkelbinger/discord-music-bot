@@ -1,0 +1,5 @@
+discord.py
+yt-dlp
+python-dotenv
+async-timeout
+PyNaCl==1.4.0 

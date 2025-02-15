@@ -1,0 +1,74 @@
+# Environment variables and secrets
+.env
+**/secrets/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+*.sublime-workspace
+*.sublime-project
+
+# Logs
+*.log
+logs/
+discord_bot.log
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Kubernetes
+kubeconfig
+*.kubeconfig
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+.nox/
+
+# Build artifacts
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Misc
+.directory
+*.bak
+*.tmp
+*.temp
