@@ -11,6 +11,6 @@ discordToken: ""
 registry:
   username: ""
   password: ""
-
+  email: ""
 nameOverride: ""
 fullnameOverride: "" 
