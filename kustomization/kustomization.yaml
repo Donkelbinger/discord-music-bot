@@ -13,3 +13,10 @@ images:
   - name: discord-music-bot
     newName: registry.mentalsj.uk/discord-music-bot
     newTag: latest
+
+registry-secret:
+  name: registry-credentials
+  namespace: max-bot
+  type: kubernetes.io/dockerconfigjson
+  data:
+    .dockerconfigjson: $registry-credentials
