@@ -18,7 +18,7 @@ spec:
         - name: {{ .Release.Name }}-registry-credentials
       containers:
       - name: discord-music-bot
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: "{{ .Values.image.repository }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
         - name: DISCORD_TOKEN
