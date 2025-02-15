@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: discord-music-bot
-  namespace: discord-bot
+  namespace: max-bot
 spec:
   replicas: 1
   selector:
@@ -17,7 +17,7 @@ spec:
         - name: registry-credentials
       containers:
       - name: discord-music-bot
-        image: your-registry.com/discord-music-bot:latest
+        image: registry.mentalsj.uk/discord-music-bot:latest
         imagePullPolicy: Always
         env:
         - name: DISCORD_TOKEN
