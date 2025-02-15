@@ -28,6 +28,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository }}:latest
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache
-          cache-to: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache,mode=max 
+          tags: ghcr.io/${{ github.repository_owner | lower }}/discord-music-bot:latest
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner | lower }}/discord-music-bot:buildcache
+          cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner | lower }}/discord-music-bot:buildcache,mode=max 
