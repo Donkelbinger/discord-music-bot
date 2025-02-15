@@ -14,8 +14,6 @@ spec:
         app: discord-music-bot
         release: {{ .Release.Name }}
     spec:
-      imagePullSecrets:
-        - name: {{ .Release.Name }}-registry-credentials
       containers:
       - name: discord-music-bot
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
