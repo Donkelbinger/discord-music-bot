@@ -19,9 +19,9 @@ generatorOptions:
 secretGenerator:
   - name: discord-bot-secret
     type: Opaque
-    envs:
-      - .env.secret
+    literals:
+      - token=$(discordToken)
   - name: registry-credentials
     type: kubernetes.io/dockerconfigjson
-    envs:
-      - .env.registry 
+    literals:
+      - .dockerconfigjson={"auths":{"registry.mentalsj.uk":{"username":"$(registry.username)","password":"$(registry.password)","auth":"$(echo -n '$(registry.username):$(registry.password)' | base64)"}}} 

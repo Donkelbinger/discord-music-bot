@@ -1,0 +1,5 @@
+apiVersion: v2
+name: discord-music-bot
+description: A Discord Music Bot
+version: 0.1.0
+appVersion: "1.0.0" 
