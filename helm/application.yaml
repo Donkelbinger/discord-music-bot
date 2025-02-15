@@ -15,6 +15,7 @@ spec:
         registry:
           username: ""
           password: ""
+          email: ""
   destination:
     server: https://kubernetes.default.svc
     namespace: discord-bot
