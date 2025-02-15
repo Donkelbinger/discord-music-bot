@@ -31,13 +31,15 @@ COPY --from=builder /usr/local/lib/python3.9/site-packages/ /usr/local/lib/pytho
 COPY --from=builder /usr/local/bin/ /usr/local/bin/
 
 # Copy only necessary bot files
-COPY bot.py music_cog.py docker-entrypoint.sh ./
+COPY bot.py music_cog.py ./
+COPY docker-entrypoint.sh .
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 
-# Make entrypoint executable
-RUN chmod +x docker-entrypoint.sh
+# Ensure proper line endings and permissions for entrypoint
+RUN sed -i 's/\r$//' docker-entrypoint.sh && \
+    chmod +x docker-entrypoint.sh
 
 # Run the bot
 ENTRYPOINT ["./docker-entrypoint.sh"]
