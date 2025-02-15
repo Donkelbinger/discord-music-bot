@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: discord-music-bot
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://your-git-repo-url.git
+    targetRevision: HEAD
+    path: discord-music-bot/kustomization-2
+    kustomize:
+      images:
+        - registry.mentalsj.uk/discord-music-bot:latest
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: discord-bot
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true 

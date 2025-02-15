@@ -5,16 +5,11 @@ namespace: discord-bot
 
 resources:
   - namespace.yaml
-  - registry-secret.yaml
-  - secret.yaml
   - deployment.yaml
+  - secret.yaml
 
+# Placeholder that will be replaced by ArgoCD
 images:
   - name: discord-music-bot
     newName: registry.mentalsj.uk/discord-music-bot
-    newTag: latest
-
-registry-secret:
-  - name: registry-credentials
-    username: test
-    password: test
+    newTag: latest 
