@@ -91,5 +91,5 @@ def main():
             continue
 
 if __name__ == "__main__":
-    logger.info("Starting Discord Music Bot...")
+    logger.info("Starting Discord Music Bot... Max suger")
     main() 
