@@ -31,7 +31,9 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ env.REPO_NAME_LOWER }}:latest
+          tags: | 
+            ghcr.io/${{ env.REPO_NAME_LOWER }}:latest
+            ghcr.io/${{ env.REPO_NAME_LOWER }}:${{ github.sha }}
           cache-from: type=registry,ref=ghcr.io/${{ env.REPO_NAME_LOWER }}:buildcache
           cache-to: type=registry,ref=ghcr.io/${{ env.REPO_NAME_LOWER }}:buildcache,mode=max
 

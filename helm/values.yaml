@@ -3,7 +3,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/donkelbinger/discord-music-bot
-  tag: latest
+  tag: ""
   pullPolicy: Always
 
 discordToken: ""
