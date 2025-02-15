@@ -4,7 +4,7 @@ metadata:
   name: discord-music-bot
   namespace: argocd
   annotations:
-    argocd-image-updater.argoproj.io/image-list: discord-bot=ghcr.io/donkelbinger/discord-music-bot
+    argocd-image-updater.argoproj.io/image-list: discord-music-bot=ghcr.io/donkelbinger/discord-music-bot
     argocd-image-updater.argoproj.io/discord-bot.update-strategy: newest-build
 spec:
   project: default
