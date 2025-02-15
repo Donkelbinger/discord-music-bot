@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: discord-music-bot
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://your-git-repo-url.git  # Replace with your git repo URL
+    targetRevision: HEAD
+    path: k8s  # Assuming all K8s manifests are in a k8s directory
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: discord-bot
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true 
