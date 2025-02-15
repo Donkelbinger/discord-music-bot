@@ -12,4 +12,44 @@ resources:
 images:
   - name: discord-music-bot
     newName: registry.mentalsj.uk/discord-music-bot
-    newTag: latest 
+    newTag: latest
+
+# Add configurations for the parameters
+configMapGenerator:
+  - name: bot-parameters
+    behavior: merge
+    literals:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - REGISTRY_USERNAME=${REGISTRY_USERNAME}
+      - REGISTRY_PASSWORD=${REGISTRY_PASSWORD}
+      - REGISTRY_AUTH=${REGISTRY_AUTH}
+
+vars:
+  - name: DISCORD_TOKEN
+    objref:
+      kind: ConfigMap
+      name: bot-parameters
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.DISCORD_TOKEN
+  - name: REGISTRY_USERNAME
+    objref:
+      kind: ConfigMap
+      name: bot-parameters
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.REGISTRY_USERNAME
+  - name: REGISTRY_PASSWORD
+    objref:
+      kind: ConfigMap
+      name: bot-parameters
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.REGISTRY_PASSWORD
+  - name: REGISTRY_AUTH
+    objref:
+      kind: ConfigMap
+      name: bot-parameters
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.REGISTRY_AUTH 
