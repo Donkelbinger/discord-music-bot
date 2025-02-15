@@ -11,5 +11,5 @@ resources:
 
 images:
   - name: discord-music-bot
-    newName: your-registry.com/discord-music-bot  # Replace with your registry URL
+    newName: registry.mentalsj.uk/discord-music-bot  # Replace with your registry URL
     newTag: latest 
