@@ -187,6 +187,10 @@ class MusicCog(commands.Cog):
                 'max_downloads': 1,
                 'youtube_include_dash_manifest': False,
                 'cachedir': False,
+                'age_limit': None,
+                'cookiefile': None,
+                'geo_bypass': True,
+                'geo_bypass_country': 'US',
                 'postprocessors': [{  # Add postprocessors for better audio
                     'key': 'FFmpegExtractAudio',
                     'preferredcodec': 'opus',
