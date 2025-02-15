@@ -2,13 +2,14 @@
 replicaCount: 1
 
 image:
-  repository: registry.mentalsj.uk/discord-music-bot
+  repository: ""
   tag: latest
   pullPolicy: Always
 
 discordToken: ""
 
 registry:
+  server: ""
   username: ""
   password: ""
   email: ""
