@@ -22,12 +22,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set lowercase repository name
+        run: echo "REPO_NAME_LOWER=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
       - name: Build and push
         uses: docker/build-push-action@v5
-        env:
-          REPO_NAME: ${{ github.repository }}
-          REPO_NAME_LOWER: ${{ github.repository | toLower }}
         with:
           context: .
           push: true
