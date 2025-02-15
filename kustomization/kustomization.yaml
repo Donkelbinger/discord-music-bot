@@ -13,3 +13,9 @@ images:
   - name: discord-music-bot
     newName: registry.mentalsj.uk/discord-music-bot
     newTag: latest
+
+registry-secret:
+  name: registry-credentials
+  username: test
+  password: test
+
