@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-discord-music-bot
+  name: "{{ .Release.Name }}-discord-music-bot"
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -22,5 +22,5 @@ spec:
         - name: DISCORD_TOKEN
           valueFrom:
             secretKeyRef:
-              name: {{ .Release.Name }}-discord-bot-secret
+              name: "{{ .Release.Name }}-discord-bot-secret"
               key: token 
