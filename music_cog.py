@@ -7,7 +7,10 @@ from async_timeout import timeout
 from collections import deque
 import logging
 import gc
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 logger = logging.getLogger('MusicCog')
 
 class MusicCog(commands.Cog):
@@ -23,9 +26,10 @@ class MusicCog(commands.Cog):
             self.ctx = ctx
             self.current = None
             self.current_title = None
+            self.current_requester = None  # Store who requested the current song
             self.current_message = None  # Store the current playing message
             self.voice = ctx.voice_client
-            self.queue = deque()
+            self.queue = deque()  # Will store tuples of (source, title, requester)
             self.next = asyncio.Event()
             self.audio_player = bot.loop.create_task(self.audio_player_task())
             self.cleanup_task = None
@@ -39,6 +43,7 @@ class MusicCog(commands.Cog):
                 if not self.queue:
                     self.current = None
                     self.current_title = None
+                    self.current_requester = None
                     if self.current_message:
                         try:
                             await self.current_message.delete()
@@ -58,7 +63,7 @@ class MusicCog(commands.Cog):
 
                 try:
                     async with timeout(180):  # 3 minute timeout
-                        self.current, self.current_title = self.queue.popleft()
+                        self.current, self.current_title, self.current_requester = self.queue.popleft()
                         logger.info(f"Playing next song in {self.ctx.guild.name}: {self.current_title}")
                         
                         if self.current_message:
@@ -68,7 +73,7 @@ class MusicCog(commands.Cog):
                                 pass
                         
                         try:
-                            self.current_message = await self.ctx.channel.send(f"🎵 Now playing: **{self.current_title}**")
+                            self.current_message = await self.ctx.channel.send(f"🎵 Now playing: **{self.current_title}** (requested by {self.current_requester.mention})")
                         except:
                             pass
 
@@ -153,9 +158,67 @@ class MusicCog(commands.Cog):
             await interaction.followup.send('You need to be in a voice channel to play music!')
             return None
 
-    @app_commands.command(name='play', description='Play a song from YouTube')
+    async def process_url(self, url):
+        """Process URL (YouTube or SoundCloud) and return audio URL and title"""
+        try:
+            # Common options for both platforms
+            ydl_opts = {
+                'format': 'bestaudio[ext=m4a]/bestaudio[ext=mp3]/bestaudio[ext=opus]/bestaudio/best',
+                'noplaylist': True,
+                'nocheckcertificate': True,
+                'ignoreerrors': False,
+                'quiet': True,
+                'no_warnings': True,
+                'default_search': 'auto',
+                'source_address': '0.0.0.0',
+                'extract_flat': False,
+                'socket_timeout': 30,
+                'retries': 5,
+                'extractor_retries': 5,
+                'skip_download': True,
+                'max_downloads': 1,
+                'youtube_include_dash_manifest': False,
+                'cachedir': False,
+                'prefer_ffmpeg': True,
+                'postprocessors': [{
+                    'key': 'FFmpegExtractAudio',
+                    'preferredcodec': 'opus',
+                    'preferredquality': '128'
+                }]
+            }
+
+            async with timeout(30):
+                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                    info = await asyncio.get_event_loop().run_in_executor(
+                        None, 
+                        lambda: ydl.extract_info(url, download=False)
+                    )
+                    if not info:
+                        raise ValueError("Could not get audio information")
+                    
+                    url2 = info.get('url')
+                    if not url2:
+                        formats = info.get('formats', [])
+                        for f in formats:
+                            if f.get('ext') in ['opus', 'm4a', 'mp3']:
+                                url2 = f.get('url')
+                                break
+                        if not url2 and formats:
+                            url2 = formats[0].get('url')
+                    
+                    title = info.get('title', 'Unknown title')
+                    # Determine platform from extractor
+                    platform = 'SoundCloud' if info.get('extractor', '').lower() == 'soundcloud' else 'YouTube'
+                    
+                    return url2, title, platform
+
+        except Exception as e:
+            logger.error(f"Error processing URL: {str(e)}")
+            raise
+
+    @app_commands.command(name='play', description='Play a song from YouTube or SoundCloud')
     async def play(self, interaction: discord.Interaction, url: str):
-        """Plays a song from YouTube"""
+        """Plays a song from YouTube or SoundCloud"""
         await interaction.response.defer()
 
         # Auto-join voice channel and get voice client
@@ -170,82 +233,16 @@ class MusicCog(commands.Cog):
         ctx = await self.bot.get_context(interaction)
         try:
             logger.info(f"Attempting to play URL: {url} in {interaction.guild.name}")
-            ydl_opts = {
-                'format': 'bestaudio/best',
-                'noplaylist': True,
-                'nocheckcertificate': True,
-                'ignoreerrors': False,
-                'quiet': True,
-                'no_warnings': True,
-                'default_search': 'auto',
-                'source_address': '0.0.0.0',
-                'extract_flat': True,
-                'socket_timeout': 10,
-                'retries': 3,
-                'extractor_retries': 3,
-                'skip_download': True,
-                'max_downloads': 1,
-                'youtube_include_dash_manifest': False,
-                'cachedir': False,
-                'age_limit': None,
-                'cookiefile': None,
-                'geo_bypass': True,
-                'geo_bypass_country': 'US',
-                'postprocessors': [{  # Add postprocessors for better audio
-                    'key': 'FFmpegExtractAudio',
-                    'preferredcodec': 'opus',
-                    'preferredquality': '128',
-                }]
-            }
-
-            # Create a ThreadPoolExecutor for CPU-intensive tasks
-            loop = asyncio.get_event_loop()
-            async def get_info():
-                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                    try:
-                        return await loop.run_in_executor(
-                            None, 
-                            lambda: ydl.extract_info(url, download=False)
-                        )
-                    except Exception as e:
-                        logger.error(f"Error extracting info: {str(e)}")
-                        raise
-
-            try:
-                async with timeout(30):
-                    info = await get_info()
-            except asyncio.TimeoutError:
-                await interaction.followup.send("The request timed out. Please try again.")
-                return
-            except Exception as e:
-                await interaction.followup.send(f"An error occurred while processing the video: {str(e)}")
-                return
-
-            if not info:
-                await interaction.followup.send("Could not get video information.")
-                return
-
-            # Get the best audio format
-            formats = info.get('formats', [])
-            url2 = None
-            for f in formats:
-                if f.get('acodec') == 'opus' and f.get('vcodec') == 'none':
-                    url2 = f.get('url')
-                    break
             
-            if not url2:
-                url2 = info.get('url')
-                if not url2 and formats:
-                    url2 = formats[0].get('url')
-                if not url2:
-                    await interaction.followup.send("Could not get video URL.")
-                    return
+            try:
+                url2, title, platform = await self.process_url(url)
+            except Exception as e:
+                await interaction.followup.send(f"Error processing URL: {str(e)}")
+                return
 
-            title = info.get('title', 'Unknown title')
-
-            # Optimize FFmpeg options for lower CPU usage
+            # FFmpeg options optimized for both platforms
             ffmpeg_options = {
-                'options': '-vn -b:a 128k -bufsize 128k -cpu-used 4 -threads 2',
+                'options': '-vn -b:a 128k -bufsize 64k -ar 48000',
                 'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
             }
 
@@ -261,10 +258,10 @@ class MusicCog(commands.Cog):
                 return
 
             state = self.get_voice_state(ctx)
-            state.voice = voice_client  # Set the voice client explicitly
-            state.queue.append((source, title))
-            logger.info(f"Added to queue: {title} in {interaction.guild.name}")
-            await interaction.followup.send(f'Added to queue: {title}')
+            state.voice = voice_client
+            state.queue.append((source, f"{title} ({platform})", interaction.user))
+            logger.info(f"Added to queue: {title} from {platform} in {interaction.guild.name}")
+            await interaction.followup.send(f'Added to queue: {title} ({platform})')
 
         except Exception as e:
             logger.error(f"Error playing URL {url}: {str(e)}", exc_info=True)
@@ -297,12 +294,12 @@ class MusicCog(commands.Cog):
 
         queue_list = []
         if state.current:
-            queue_list.append(f"**Currently Playing:** {state.current_title}")
+            queue_list.append(f"**Currently Playing:** {state.current_title} (requested by {state.current_requester.mention})")
         
         if state.queue:
             queue_list.append("\n**Queue:**")
-            for i, (_, title) in enumerate(state.queue, 1):
-                queue_list.append(f"{i}. {title}")
+            for i, (_, title, requester) in enumerate(state.queue, 1):
+                queue_list.append(f"{i}. {title} (requested by {requester.mention})")
 
         queue_message = '\n'.join(queue_list)
         await interaction.response.send_message(queue_message)
@@ -327,4 +324,59 @@ class MusicCog(commands.Cog):
             await interaction.response.send_message('Disconnected from voice channel.')
             logger.info(f"Left voice channel in {interaction.guild.name}")
         else:
-            await interaction.response.send_message('Not connected to any voice channel.') 
+            await interaction.response.send_message('Not connected to any voice channel.')
+
+    @app_commands.command(name='remove', description='Remove a specific song from the queue by its position number')
+    async def remove(self, interaction: discord.Interaction, position: int):
+        """Removes a specific song from the queue"""
+        ctx = await self.bot.get_context(interaction)
+        state = self.get_voice_state(ctx)
+        
+        if len(state.queue) == 0:
+            await interaction.response.send_message('Queue is empty.')
+            return
+            
+        if position < 1 or position > len(state.queue):
+            await interaction.response.send_message(f'Invalid position. Please enter a number between 1 and {len(state.queue)}.')
+            return
+            
+        try:
+            # Convert queue to list to remove specific index
+            queue_list = list(state.queue)
+            removed_song = queue_list.pop(position - 1)  # -1 because user input is 1-based
+            state.queue = deque(queue_list)
+            
+            # Get the title and requester from the removed song
+            _, title, requester = removed_song
+            
+            logger.info(f"Removed song at position {position} from queue in {interaction.guild.name}")
+            await interaction.response.send_message(f'Removed from queue: {title} (requested by {requester.mention})')
+            
+        except Exception as e:
+            logger.error(f"Error removing song from queue: {str(e)}")
+            await interaction.response.send_message('An error occurred while trying to remove the song.')
+
+    @app_commands.command(name='help', description='Show all available commands')
+    async def help(self, interaction: discord.Interaction):
+        """Shows all available commands and their descriptions"""
+        embed = discord.Embed(
+            title="🎵 Music Bot Commands",
+            description="Here are all the available commands:",
+            color=discord.Color.blue()
+        )
+
+        commands = {
+            "🎵 /play [url]": "Play a song from YouTube or SoundCloud\nExample: `/play https://www.youtube.com/...`",
+            "⏭️ /skip": "Skip the currently playing song",
+            "📋 /queue": "Show the current music queue and who requested each song",
+            "🗑️ /clear": "Clear all songs from the queue",
+            "❌ /remove [number]": "Remove a specific song from the queue by its position\nExample: `/remove 2` removes the second song",
+            "👋 /leave": "Make the bot leave the voice channel",
+            "❓ /help": "Show this help message"
+        }
+
+        for cmd, desc in commands.items():
+            embed.add_field(name=cmd, value=desc, inline=False)
+
+        embed.set_footer(text="Bot made with ❤️ | Supports both YouTube and SoundCloud links")
+        await interaction.response.send_message(embed=embed) 
