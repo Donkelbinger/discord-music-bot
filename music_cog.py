@@ -116,8 +116,10 @@ class MusicCog(commands.Cog):
             try:
                 await asyncio.sleep(180)  # Wait 3 minutes
                 if not self.queue and not self.current:
-                    await self.stop()
-                    await self.ctx.channel.send("👋 Leaving voice channel due to inactivity.")
+                    # Check if there are any users in the voice channel
+                    if len(self.voice.channel.members) <= 1:  # Only bot is in the channel
+                        await self.stop()
+                        await self.ctx.channel.send("👋 Leaving voice channel due to inactivity.")
             except asyncio.CancelledError:
                 pass
 
@@ -189,12 +191,41 @@ class MusicCog(commands.Cog):
 
             async with timeout(30):
                 with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                    info = await asyncio.get_event_loop().run_in_executor(
-                        None, 
-                        lambda: ydl.extract_info(url, download=False)
-                    )
-                    if not info:
-                        raise ValueError("Could not get audio information")
+                    # If the input is not a URL, treat it as a search query
+                    if not url.startswith(('http://', 'https://')):
+                        logger.info(f"Searching for: {url}")
+                        # Try YouTube first
+                        try:
+                            info = await asyncio.get_event_loop().run_in_executor(
+                                None,
+                                lambda: ydl.extract_info(f"ytsearch:{url}", download=False)
+                            )
+                            if info and info.get('entries'):
+                                info = info['entries'][0]
+                                platform = 'YouTube'
+                            else:
+                                # If YouTube fails, try SoundCloud
+                                info = await asyncio.get_event_loop().run_in_executor(
+                                    None,
+                                    lambda: ydl.extract_info(f"scsearch:{url}", download=False)
+                                )
+                                if info and info.get('entries'):
+                                    info = info['entries'][0]
+                                    platform = 'SoundCloud'
+                                else:
+                                    raise ValueError("No results found on either platform")
+                        except Exception as e:
+                            logger.error(f"Search error: {str(e)}")
+                            raise ValueError(f"Could not find any results for '{url}'")
+                    else:
+                        # Process as URL
+                        info = await asyncio.get_event_loop().run_in_executor(
+                            None, 
+                            lambda: ydl.extract_info(url, download=False)
+                        )
+                        if not info:
+                            raise ValueError("Could not get audio information")
+                        platform = 'SoundCloud' if info.get('extractor', '').lower() == 'soundcloud' else 'YouTube'
                     
                     url2 = info.get('url')
                     if not url2:
@@ -207,18 +238,15 @@ class MusicCog(commands.Cog):
                             url2 = formats[0].get('url')
                     
                     title = info.get('title', 'Unknown title')
-                    # Determine platform from extractor
-                    platform = 'SoundCloud' if info.get('extractor', '').lower() == 'soundcloud' else 'YouTube'
-                    
                     return url2, title, platform
 
         except Exception as e:
             logger.error(f"Error processing URL: {str(e)}")
             raise
 
-    @app_commands.command(name='play', description='Play a song from YouTube or SoundCloud')
-    async def play(self, interaction: discord.Interaction, url: str):
-        """Plays a song from YouTube or SoundCloud"""
+    @app_commands.command(name='play', description='Play a song by URL or search query')
+    async def play(self, interaction: discord.Interaction, query: str):
+        """Plays a song from YouTube or SoundCloud, or searches for a song"""
         await interaction.response.defer()
 
         # Auto-join voice channel and get voice client
@@ -232,12 +260,12 @@ class MusicCog(commands.Cog):
 
         ctx = await self.bot.get_context(interaction)
         try:
-            logger.info(f"Attempting to play URL: {url} in {interaction.guild.name}")
+            logger.info(f"Attempting to play: {query} in {interaction.guild.name}")
             
             try:
-                url2, title, platform = await self.process_url(url)
+                url2, title, platform = await self.process_url(query)
             except Exception as e:
-                await interaction.followup.send(f"Error processing URL: {str(e)}")
+                await interaction.followup.send(f"Error processing request: {str(e)}")
                 return
 
             # FFmpeg options optimized for both platforms
@@ -264,7 +292,7 @@ class MusicCog(commands.Cog):
             await interaction.followup.send(f'Added to queue: {title} ({platform})')
 
         except Exception as e:
-            logger.error(f"Error playing URL {url}: {str(e)}", exc_info=True)
+            logger.error(f"Error playing {query}: {str(e)}", exc_info=True)
             await interaction.followup.send(f'An error occurred: {str(e)}')
 
     @app_commands.command(name='skip', description='Skip the current song')
@@ -366,7 +394,7 @@ class MusicCog(commands.Cog):
         )
 
         commands = {
-            "🎵 /play [url]": "Play a song from YouTube or SoundCloud\nExample: `/play https://www.youtube.com/...`",
+            "🎵 /play [query]": "Play a song by:\n• Searching for a song name (e.g., `/play despacito`)\n• Using a YouTube URL (e.g., `/play https://youtube.com/...`)\n• Using a SoundCloud URL (e.g., `/play https://soundcloud.com/...`)",
             "⏭️ /skip": "Skip the currently playing song",
             "📋 /queue": "Show the current music queue and who requested each song",
             "🗑️ /clear": "Clear all songs from the queue",
@@ -378,5 +406,5 @@ class MusicCog(commands.Cog):
         for cmd, desc in commands.items():
             embed.add_field(name=cmd, value=desc, inline=False)
 
-        embed.set_footer(text="Bot made with ❤️ | Supports both YouTube and SoundCloud links")
+        embed.set_footer(text="Bot made with ❤️ | Supports both YouTube and SoundCloud links and searches")
         await interaction.response.send_message(embed=embed) 
