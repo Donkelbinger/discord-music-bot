@@ -62,7 +62,7 @@ class MusicCog(commands.Cog):
                     self.cleanup_task = None
 
                 try:
-                    async with timeout(180):  # 3 minute timeout
+                    async with timeout(3600):  # Increase timeout to 1 hour
                         self.current, self.current_title, self.current_requester = self.queue.popleft()
                         logger.info(f"Playing next song in {self.ctx.guild.name}: {self.current_title}")
                         
@@ -174,9 +174,10 @@ class MusicCog(commands.Cog):
                 'default_search': 'auto',
                 'source_address': '0.0.0.0',
                 'extract_flat': False,
-                'socket_timeout': 30,
-                'retries': 5,
-                'extractor_retries': 5,
+                'socket_timeout': 60,  # Increased socket timeout
+                'retries': 10,  # More retries
+                'extractor_retries': 10,  # More extractor retries
+                'fragment_retries': 10,  # Added for handling segmented longer videos
                 'skip_download': True,
                 'max_downloads': 1,
                 'youtube_include_dash_manifest': False,
@@ -190,7 +191,7 @@ class MusicCog(commands.Cog):
                 }]
             }
 
-            async with timeout(30):
+            async with timeout(120):  # Increase extraction timeout to 2 minutes
                 with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                     # If the input is not a URL, treat it as a search query
                     if not url.startswith(('http://', 'https://')):
@@ -271,8 +272,8 @@ class MusicCog(commands.Cog):
 
             # FFmpeg options optimized for both platforms
             ffmpeg_options = {
-                'options': '-vn -b:a 128k -bufsize 64k -ar 48000 -af loudnorm=I=-16:TP=-1.5:LRA=11',
-                'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
+                'options': '-vn -b:a 128k -bufsize 256k -ar 48000 -af loudnorm=I=-16:TP=-1.5:LRA=11',
+                'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -timeout 60000000'
             }
 
             try:
