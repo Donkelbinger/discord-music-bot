@@ -73,7 +73,7 @@ class MusicCog(commands.Cog):
                                 pass
                         
                         try:
-                            self.current_message = await self.ctx.channel.send(f"🎵 Now playing: **{self.current_title}** (requested by {self.current_requester.mention})")
+                            self.current_message = await self.ctx.channel.send(f"🎵 Now playing: **{self.current_title}** (requested by {self.current_requester.name})")
                         except:
                             pass
 
@@ -182,6 +182,7 @@ class MusicCog(commands.Cog):
                 'youtube_include_dash_manifest': False,
                 'cachedir': False,
                 'prefer_ffmpeg': True,
+                'age_limit': 0,  # Allow all content regardless of age restriction
                 'postprocessors': [{
                     'key': 'FFmpegExtractAudio',
                     'preferredcodec': 'opus',
@@ -270,7 +271,7 @@ class MusicCog(commands.Cog):
 
             # FFmpeg options optimized for both platforms
             ffmpeg_options = {
-                'options': '-vn -b:a 128k -bufsize 64k -ar 48000',
+                'options': '-vn -b:a 128k -bufsize 64k -ar 48000 -af loudnorm=I=-16:TP=-1.5:LRA=11',
                 'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5'
             }
 
@@ -322,12 +323,12 @@ class MusicCog(commands.Cog):
 
         queue_list = []
         if state.current:
-            queue_list.append(f"**Currently Playing:** {state.current_title} (requested by {state.current_requester.mention})")
+            queue_list.append(f"**Currently Playing:** {state.current_title} (requested by {state.current_requester.name})")
         
         if state.queue:
             queue_list.append("\n**Queue:**")
             for i, (_, title, requester) in enumerate(state.queue, 1):
-                queue_list.append(f"{i}. {title} (requested by {requester.mention})")
+                queue_list.append(f"{i}. {title} (requested by {requester.name})")
 
         queue_message = '\n'.join(queue_list)
         await interaction.response.send_message(queue_message)
@@ -378,7 +379,7 @@ class MusicCog(commands.Cog):
             _, title, requester = removed_song
             
             logger.info(f"Removed song at position {position} from queue in {interaction.guild.name}")
-            await interaction.response.send_message(f'Removed from queue: {title} (requested by {requester.mention})')
+            await interaction.response.send_message(f'Removed from queue: {title} (requested by {requester.name})')
             
         except Exception as e:
             logger.error(f"Error removing song from queue: {str(e)}")
