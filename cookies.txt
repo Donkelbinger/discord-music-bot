@@ -1,0 +1,51 @@
+# Netscape HTTP Cookie File
+# http://curl.haxx.se/rfc/cookie_spec.html
+# This is a generated file!  Do not edit.
+
+
+.youtube.com	TRUE	/	TRUE	1747088827	LOGIN_INFO	AFmmF2swRQIhAI2Cv8iAOdUu5HB5ciZhGo93zuLqueC8Pb76wX8Xs7YgAiAnZVHZfkz3_nhUVPMMM4onNmcR7kk2o9pPfIf0IBDZHg:QUQ3MjNmd0l3TzVNWFZhbzYxbERxc1Z4dHdPOUh1SE05SktJcVNVMjg4eWJ6UTYyOGFlV0RfMWsyY0JIWEFjcGV1eFZJS1pYTUttVm9SQU9DWnJjMTB3cTZRNDM2U01CR3Q3cmdOcTdQdkZMOTJGOHplOWltemtMSkJqT3dGdm5kYzRPczBZYW5tUTluRzRJby0tWHVheG8wYzhQcndGVVNR
+.youtube.com	TRUE	/	TRUE	1781205661	PREF	f6=40000000&f7=4000&tz=Europe.Stockholm&f5=30000
+.youtube.com	TRUE	/	FALSE	1781205161	SID	g.a000wwjiZNrAdJle9m7UD6zhGvcUkOSmTV3rLOHRhghDWVyLmucQXM6KoGc4FfteYkZzXgm1hgACgYKAb8SARYSFQHGX2MiicvhZKUmi9mGtvMsuGJObxoVAUF8yKomvBDyqiY2c0t2g-XMkPef0076
+.youtube.com	TRUE	/	TRUE	1781205161	__Secure-1PSID	g.a000wwjiZNrAdJle9m7UD6zhGvcUkOSmTV3rLOHRhghDWVyLmucQKOY8IGeSesD0LARvsaC6xQACgYKARgSARYSFQHGX2MilaNGTi11iFic-5W0d5xAjRoVAUF8yKrAUZN9uGeeOtlWKGSJR6cs0076
+.youtube.com	TRUE	/	TRUE	1781205161	__Secure-3PSID	g.a000wwjiZNrAdJle9m7UD6zhGvcUkOSmTV3rLOHRhghDWVyLmucQylyDPFOwJB0cwhzijihwqgACgYKAU4SARYSFQHGX2MiyVMBlYiiqzdKSFqzwW2VqxoVAUF8yKo6vSXSZhlPHqWvy-Zeu_c70076
+.youtube.com	TRUE	/	FALSE	1781205161	HSID	AFeAbo7QmutDEoGZD
+.youtube.com	TRUE	/	TRUE	1781205161	SSID	AoAF3bg0Qh-dbSF14
+.youtube.com	TRUE	/	FALSE	1781205161	APISID	ptcF6MfGgb52A7c2/AeLmac--rev0z-oBW
+.youtube.com	TRUE	/	TRUE	1781205161	SAPISID	HY4tnUQhaNalnPYv/AidpyKPiDrn_mlUwa
+.youtube.com	TRUE	/	TRUE	1781205161	__Secure-1PAPISID	HY4tnUQhaNalnPYv/AidpyKPiDrn_mlUwa
+.youtube.com	TRUE	/	TRUE	1781205161	__Secure-3PAPISID	HY4tnUQhaNalnPYv/AidpyKPiDrn_mlUwa
+accounts.google.com	FALSE	/	TRUE	1781205200	LSID	o.admin.google.com|o.chromewebstore.google.com|o.lens.google.com|o.mail.google.com|s.SE|s.youtube:g.a000wwjiZEEXD2-fXT0acpkr_BRgARl03s3a3vyacMdJsOzsL4ExyoQeFdlClnJ3NyBXK0IHEgACgYKAT0SARYSFQHGX2Mi-Vf8JiGJ4Y5nr1dAncaCmBoVAUF8yKqPvt3J46-BjRKxxkG6hggP0076
+accounts.google.com	FALSE	/	TRUE	1781205200	__Host-1PLSID	o.admin.google.com|o.chromewebstore.google.com|o.lens.google.com|o.mail.google.com|s.SE|s.youtube:g.a000wwjiZEEXD2-fXT0acpkr_BRgARl03s3a3vyacMdJsOzsL4Exe-YdVIU67hIhxsDHlXQGFQACgYKAbQSARYSFQHGX2MiVp4Uh9hDzov4PhawcqCnDBoVAUF8yKpCjN9PhfdVJoVTZW5t8eKi0076
+accounts.google.com	FALSE	/	TRUE	1781205200	__Host-3PLSID	o.admin.google.com|o.chromewebstore.google.com|o.lens.google.com|o.mail.google.com|s.SE|s.youtube:g.a000wwjiZEEXD2-fXT0acpkr_BRgARl03s3a3vyacMdJsOzsL4ExLNdR7K3ihjINYLBNVCE9LgACgYKARoSARYSFQHGX2Mi7K1gv4B0Llz0f87mo2YcvRoVAUF8yKp0GBKwG8zw08AwzoJGoSMZ0076
+.youtube.com	TRUE	/	TRUE	1780773167	__Secure-YEC	CgttdktlVmRyVkVCTSiX5e7ABjInCgJTRRIhEh0SGwsMDg8QERITFBUWFxgZGhscHR4fICEiIyQlJiBW
+.youtube.com	TRUE	/	TRUE	1778184180	__Secure-1PSIDTS	sidts-CjIBjplskK44NhG69TQ--pmagIUIQ6CRx0QxuSmAg7kqM2xrpbz2jT4ua1a1k0w7zn2KvRAA
+.youtube.com	TRUE	/	TRUE	1778184180	__Secure-3PSIDTS	sidts-CjIBjplskK44NhG69TQ--pmagIUIQ6CRx0QxuSmAg7kqM2xrpbz2jT4ua1a1k0w7zn2KvRAA
+.youtube.com	TRUE	/	FALSE	1778184180	SIDCC	AKEyXzWnaRJDieEu_hkilmDFujllhug4gS55ZidcXouYlkKQcMLx-zt9INqLkd45qPsPQ9lrFr8
+.youtube.com	TRUE	/	TRUE	1778184180	__Secure-1PSIDCC	AKEyXzXn4mEaSvKZP8-QIdjBsPYkGX4egur3oXRuhiYiFkbhMAYb8t_7u8IKwwe_SQMBKVmgzto
+.youtube.com	TRUE	/	TRUE	1778184180	__Secure-3PSIDCC	AKEyXzX0Dpj5mr7IWS27giGEsG4_A0-qqsrnnIMMeee_93RWGJPhgo2iq9QtITpuGxyGHA6wSg
+.youtube.com	TRUE	/	TRUE	1748440953	VISITOR_INFO1_LIVE	vNIFB1ThTPA
+.youtube.com	TRUE	/	TRUE	1747088827	LOGIN_INFO	AFmmF2swRQIhAI2Cv8iAOdUu5HB5ciZhGo93zuLqueC8Pb76wX8Xs7YgAiAnZVHZfkz3_nhUVPMMM4onNmcR7kk2o9pPfIf0IBDZHg:QUQ3MjNmd0l3TzVNWFZhbzYxbERxc1Z4dHdPOUh1SE05SktJcVNVMjg4eWJ6UTYyOGFlV0RfMWsyY0JIWEFjcGV1eFZJS1pYTUttVm9SQU9DWnJjMTB3cTZRNDM2U01CR3Q3cmdOcTdQdkZMOTJGOHplOWltemtMSkJqT3dGdm5kYzRPczBZYW5tUTluRzRJby0tWHVheG8wYzhQcndGVVNR
+.youtube.com	TRUE	/	TRUE	1781205661	PREF	f6=40000000&f7=4000&tz=Europe.Stockholm&f5=30000
+.youtube.com	TRUE	/	TRUE	1748440953	VISITOR_PRIVACY_METADATA	CgJTRRIcEhgSFhMLFBUWFwwYGRobHB0eHw4PIBAREiEgTw%3D%3D
+.youtube.com	TRUE	/	FALSE	1781205161	SID	g.a000wwjiZNrAdJle9m7UD6zhGvcUkOSmTV3rLOHRhghDWVyLmucQXM6KoGc4FfteYkZzXgm1hgACgYKAb8SARYSFQHGX2MiicvhZKUmi9mGtvMsuGJObxoVAUF8yKomvBDyqiY2c0t2g-XMkPef0076
+.youtube.com	TRUE	/	TRUE	1781205161	__Secure-1PSID	g.a000wwjiZNrAdJle9m7UD6zhGvcUkOSmTV3rLOHRhghDWVyLmucQKOY8IGeSesD0LARvsaC6xQACgYKARgSARYSFQHGX2MilaNGTi11iFic-5W0d5xAjRoVAUF8yKrAUZN9uGeeOtlWKGSJR6cs0076
+.youtube.com	TRUE	/	TRUE	1781205161	__Secure-3PSID	g.a000wwjiZNrAdJle9m7UD6zhGvcUkOSmTV3rLOHRhghDWVyLmucQylyDPFOwJB0cwhzijihwqgACgYKAU4SARYSFQHGX2MiyVMBlYiiqzdKSFqzwW2VqxoVAUF8yKo6vSXSZhlPHqWvy-Zeu_c70076
+.youtube.com	TRUE	/	FALSE	1781205161	HSID	AFeAbo7QmutDEoGZD
+.youtube.com	TRUE	/	TRUE	1781205161	SSID	AoAF3bg0Qh-dbSF14
+.youtube.com	TRUE	/	FALSE	1781205161	APISID	ptcF6MfGgb52A7c2/AeLmac--rev0z-oBW
+.youtube.com	TRUE	/	TRUE	1781205161	SAPISID	HY4tnUQhaNalnPYv/AidpyKPiDrn_mlUwa
+.youtube.com	TRUE	/	TRUE	1781205161	__Secure-1PAPISID	HY4tnUQhaNalnPYv/AidpyKPiDrn_mlUwa
+.youtube.com	TRUE	/	TRUE	1781205161	__Secure-3PAPISID	HY4tnUQhaNalnPYv/AidpyKPiDrn_mlUwa
+.youtube.com	TRUE	/	TRUE	0	YSC	ZrNeSbBzm88
+.youtube.com	TRUE	/	TRUE	1780773660	VISITOR_PRIVACY_METADATA	CgJTRRIhEh0SGwsMDg8QERITFBUWFxgZGhscHR4fICEiIyQlJiBW
+.youtube.com	TRUE	/	TRUE	1762197169	__Secure-ROLLOUT_TOKEN	COLm08b4kLKd2wEQ3daepIiSjQMY0pLNpIiSjQM%3D
+accounts.google.com	FALSE	/	TRUE	1781205200	LSID	o.admin.google.com|o.chromewebstore.google.com|o.lens.google.com|o.mail.google.com|s.SE|s.youtube:g.a000wwjiZEEXD2-fXT0acpkr_BRgARl03s3a3vyacMdJsOzsL4ExyoQeFdlClnJ3NyBXK0IHEgACgYKAT0SARYSFQHGX2Mi-Vf8JiGJ4Y5nr1dAncaCmBoVAUF8yKqPvt3J46-BjRKxxkG6hggP0076
+accounts.google.com	FALSE	/	TRUE	1781205200	__Host-1PLSID	o.admin.google.com|o.chromewebstore.google.com|o.lens.google.com|o.mail.google.com|s.SE|s.youtube:g.a000wwjiZEEXD2-fXT0acpkr_BRgARl03s3a3vyacMdJsOzsL4Exe-YdVIU67hIhxsDHlXQGFQACgYKAbQSARYSFQHGX2MiVp4Uh9hDzov4PhawcqCnDBoVAUF8yKpCjN9PhfdVJoVTZW5t8eKi0076
+accounts.google.com	FALSE	/	TRUE	1781205200	__Host-3PLSID	o.admin.google.com|o.chromewebstore.google.com|o.lens.google.com|o.mail.google.com|s.SE|s.youtube:g.a000wwjiZEEXD2-fXT0acpkr_BRgARl03s3a3vyacMdJsOzsL4ExLNdR7K3ihjINYLBNVCE9LgACgYKARoSARYSFQHGX2Mi7K1gv4B0Llz0f87mo2YcvRoVAUF8yKp0GBKwG8zw08AwzoJGoSMZ0076
+.youtube.com	TRUE	/	TRUE	1780773167	__Secure-YEC	CgttdktlVmRyVkVCTSiX5e7ABjInCgJTRRIhEh0SGwsMDg8QERITFBUWFxgZGhscHR4fICEiIyQlJiBW
+.youtube.com	TRUE	/	TRUE	1778184180	__Secure-1PSIDTS	sidts-CjIBjplskK44NhG69TQ--pmagIUIQ6CRx0QxuSmAg7kqM2xrpbz2jT4ua1a1k0w7zn2KvRAA
+.youtube.com	TRUE	/	TRUE	1778184180	__Secure-3PSIDTS	sidts-CjIBjplskK44NhG69TQ--pmagIUIQ6CRx0QxuSmAg7kqM2xrpbz2jT4ua1a1k0w7zn2KvRAA
+.youtube.com	TRUE	/	FALSE	1778184180	SIDCC	AKEyXzWnaRJDieEu_hkilmDFujllhug4gS55ZidcXouYlkKQcMLx-zt9INqLkd45qPsPQ9lrFr8
+.youtube.com	TRUE	/	TRUE	1778184180	__Secure-1PSIDCC	AKEyXzXn4mEaSvKZP8-QIdjBsPYkGX4egur3oXRuhiYiFkbhMAYb8t_7u8IKwwe_SQMBKVmgzto
+.youtube.com	TRUE	/	TRUE	1778184180	__Secure-3PSIDCC	AKEyXzX0Dpj5mr7IWS27giGEsG4_A0-qqsrnnIMMeee_93RWGJPhgo2iq9QtITpuGxyGHA6wSg
+
