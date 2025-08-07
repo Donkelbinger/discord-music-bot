@@ -7,6 +7,7 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 from modules.config_validator import ConfigValidator, ConfigValidationError
+from music_cog import MusicCog
 import time
 import logging
 import sys

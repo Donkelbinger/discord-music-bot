@@ -32,6 +32,7 @@ COPY --from=builder /usr/local/bin/ /usr/local/bin/
 
 # Copy only necessary bot files
 COPY bot.py music_cog.py ./
+COPY modules/ ./modules/
 COPY docker-entrypoint.sh .
 
 # Set environment variables
