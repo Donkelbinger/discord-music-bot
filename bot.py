@@ -51,6 +51,8 @@ async def on_ready():
     logger.info(f'Connected to {len(bot.guilds)} guilds')
     for guild in bot.guilds:
         logger.info(f'Connected to guild: {guild.name} (ID: {guild.id})')
+        logger.info(f'Syncing commands with guild: {guild.name} (ID: {guild.id})')
+        await bot.tree.sync(guild=discord.Object(id=guild.id))
 
 @bot.event
 async def on_connect():
@@ -92,4 +94,5 @@ def main():
 
 if __name__ == "__main__":
     logger.info("Starting Discord Music Bot... xd")
+
     main() 
