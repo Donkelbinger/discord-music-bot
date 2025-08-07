@@ -1,6 +1,27 @@
-discord.py>=2.3.0
-yt-dlp>=2023.12.30
-python-dotenv>=1.0.0
-async-timeout>=4.0.0
-PyNaCl==1.5.0
-aiohttp>=3.9.0
+# Discord Music Bot Dependencies
+# Updated to modern stable versions for security and compatibility
+
+discord.py>=2.4.0
+yt-dlp>=2024.8.6
+aiohttp>=3.10.0
+aiofiles>=24.1.0
+PyNaCl>=1.5.0
+python-dotenv>=1.0.1
+psutil>=5.9.0
+
+# Conditional dependency for Python <3.11 (async-timeout deprecated in 3.11+)
+async-timeout>=4.0.0; python_version<"3.11"
+
+# Environment and configuration
+python-dotenv>=1.0.1
+
+# Async utilities and HTTP
+aiohttp>=3.10.0  # Updated for security and performance improvements
+aiofiles>=24.1.0  # Updated to latest stable for better async file operations
+
+# Audio processing and encryption
+PyNaCl>=1.5.0  # Updated from pinned 1.5.0, allows patch updates for security
+
+# Timeout handling - DEPRECATED in Python 3.11+
+# Note: Consider migrating to built-in asyncio.timeout for Python 3.11+
+async-timeout>=4.0.3; python_version<'3.11'  # Only install for older Python versions
