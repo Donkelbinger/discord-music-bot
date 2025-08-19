@@ -23,4 +23,10 @@ spec:
           valueFrom:
             secretKeyRef:
               name: "{{ .Release.Name }}-discord-bot-secret"
-              key: token 
+              key: token
+        - name: AUTHORIZED_GUILD_IDS
+          valueFrom:
+            secretKeyRef:
+              name: "{{ .Release.Name }}-discord-bot-secret"
+              key: authed_guilds
+
