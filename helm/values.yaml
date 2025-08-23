@@ -30,4 +30,4 @@ queuePersistence:
 
 # Helm Chart Configuration
 nameOverride: ""
-fullnameOverride: ""
+fullnameOverride: "" 
