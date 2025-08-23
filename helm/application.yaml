@@ -14,7 +14,27 @@ spec:
     path: discord-music-bot/helm
     helm:
       values: |
+        # Discord Bot Configuration
         discordToken: ""
+        authorizedGuildIds: ""
+        
+        # YouTube Configuration  
+        youtubeCookieFile: ""
+        
+        # Bot Behavior Configuration
+        logLevel: "INFO"
+        commandPrefix: "/"
+        maxQueueSize: "50"
+        userQueueLimit: "20"
+        voiceTimeout: "300"
+        audioQuality: "medium"
+        
+        # Queue Persistence Configuration
+        queuePersistence:
+          enabled: "true"
+          file: "data/queue_state.json"
+          maxAgeHours: "24"
+          saveIntervalMinutes: "5"
   destination:
     server: https://kubernetes.default.svc
     namespace: discord-bot
