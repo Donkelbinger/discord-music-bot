@@ -23,4 +23,28 @@ spec:
           valueFrom:
             secretKeyRef:
               name: "{{ .Release.Name }}-discord-bot-secret"
-              key: token 
+              key: token
+        - name: AUTHORIZED_GUILD_IDS
+          value: "{{ .Values.authorizedGuildIds }}"
+        - name: YOUTUBE_COOKIE_FILE
+          value: "{{ .Values.youtubeCookieFile }}"
+        - name: LOG_LEVEL
+          value: "{{ .Values.logLevel }}"
+        - name: COMMAND_PREFIX
+          value: "{{ .Values.commandPrefix }}"
+        - name: MAX_QUEUE_SIZE
+          value: "{{ .Values.maxQueueSize }}"
+        - name: USER_QUEUE_LIMIT
+          value: "{{ .Values.userQueueLimit }}"
+        - name: VOICE_TIMEOUT
+          value: "{{ .Values.voiceTimeout }}"
+        - name: AUDIO_QUALITY
+          value: "{{ .Values.audioQuality }}"
+        - name: ENABLE_QUEUE_PERSISTENCE
+          value: "{{ .Values.queuePersistence.enabled }}"
+        - name: QUEUE_PERSISTENCE_FILE
+          value: "{{ .Values.queuePersistence.file }}"
+        - name: QUEUE_PERSISTENCE_MAX_AGE_HOURS
+          value: "{{ .Values.queuePersistence.maxAgeHours }}"
+        - name: QUEUE_SAVE_INTERVAL_MINUTES
+          value: "{{ .Values.queuePersistence.saveIntervalMinutes }}"
