@@ -135,6 +135,30 @@ class MusicCog(commands.Cog):
 
                     # Play the song with proper error handling
                     try:
+                        # Validate voice connection before playing
+                        if not self.voice or not self.voice.is_connected():
+                            logger.warning(f"Voice client disconnected in {self.ctx.guild.name}, attempting to reconnect")
+                            # Try to reconnect to the user's voice channel
+                            if hasattr(self.ctx, 'author') and self.ctx.author.voice:
+                                try:
+                                    self.voice = await self.ctx.author.voice.channel.connect()
+                                    logger.info(f"Successfully reconnected to voice channel in {self.ctx.guild.name}")
+                                except Exception as reconnect_error:
+                                    logger.error(f"Failed to reconnect to voice channel: {str(reconnect_error)}")
+                                    await self._send_error_to_channel(
+                                        "🔌 **Connection Lost**",
+                                        "❌ Lost connection to voice channel and failed to reconnect",
+                                        f"Skipping song. Technical details: `{str(reconnect_error)}`"
+                                    )
+                                    continue
+                            else:
+                                await self._send_error_to_channel(
+                                    "🔌 **Connection Lost**",
+                                    "❌ Lost connection to voice channel",
+                                    "Cannot reconnect - user not in a voice channel"
+                                )
+                                continue
+                        
                         if self.voice and self.current:
                             self.voice.play(self.current, after=self.play_next)
                             logger.info(f"Started playing song in {self.ctx.guild.name}")
