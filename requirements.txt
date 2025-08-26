@@ -1,7 +1,7 @@
 # Discord Music Bot Dependencies
 # Updated to modern stable versions for security and compatibility
 
-discord.py>=2.4.0
+discord.py>=2.5.0
 yt-dlp>=2024.8.6
 aiohttp>=3.10.0
 aiofiles>=24.1.0
