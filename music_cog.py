@@ -977,7 +977,14 @@ class MusicCog(commands.Cog):
             if not info:
                 raise ValueError("Could not get audio information")
             
-            platform = 'SoundCloud' if info.get('extractor', '').lower() == 'soundcloud' else 'YouTube'
+            extractor = info.get('extractor', '').lower()
+            if extractor == 'soundcloud':
+                platform = 'SoundCloud'
+            elif extractor in ['lbry', 'odysee']:
+                platform = 'Odysee'
+            else:
+                platform = 'YouTube'  # Default fallback
+            
             return self._extract_url_and_title(info, platform)
         except yt_dlp.utils.DownloadError as e:
             error_msg = str(e)
@@ -1052,7 +1059,7 @@ class MusicCog(commands.Cog):
             
             # Basic URL validation - check for common URL patterns
             url_pattern = re.compile(
-                r'^(https?://)?(www\.)?(youtube\.com|youtu\.be|soundcloud\.com|music\.youtube\.com)'
+                r'^(https?://)?(www\.)?(youtube\.com|youtu\.be|soundcloud\.com|music\.youtube\.com|odysee\.com|lbry\.tv)'
             )
             if not url_pattern.search(sanitized.lower()):
                 # Allow the URL through but log it for monitoring
@@ -1086,7 +1093,7 @@ class MusicCog(commands.Cog):
         return True, sanitized, None
     
     @app_commands.command(name='play', description='Play a song by URL or search query')
-    @app_commands.describe(query="YouTube/SoundCloud URL or search terms")
+    @app_commands.describe(query="YouTube/SoundCloud/Odysee URL or search terms")
     @commands.cooldown(rate=3, per=10, type=commands.BucketType.user)  # 3 commands per 10 seconds per user
     async def play(self, interaction: discord.Interaction, query: str):
         """Plays a song from YouTube or SoundCloud, or searches for a song"""
