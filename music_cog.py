@@ -238,7 +238,7 @@ class MusicCog(commands.Cog):
             """Send a message with information about the current song."""
             try:
                 self.current_message = await self.ctx.channel.send(
-                    f"🎵 Now playing: **{self.current_title}** (requested by {self.current_requester.name})"
+                    f"🎵 Now playing: **{self.current_title}** (requested by {self.current_requester.display_name})"
                 )
             except discord.HTTPException as e:
                 logger.error(f"Failed to send now playing message: {e}")
@@ -1117,7 +1117,14 @@ class MusicCog(commands.Cog):
         if not voice_client:
             return
 
-        ctx = await self.bot.get_context(interaction)
+        # Create mock context for compatibility with get_voice_state
+class MockContext:
+    def __init__(self, guild, voice_client, channel):
+        self.guild = guild
+        self.voice_client = voice_client
+        self.channel = channel
+
+        mock_ctx = MockContext(interaction.guild, voice_client, interaction.channel)
         try:
             # Log sanitized query (truncated for security)
             query_log = sanitized_query if len(sanitized_query) <= 100 else f"{sanitized_query[:100]}..."
@@ -1187,7 +1194,7 @@ class MusicCog(commands.Cog):
                 return
         
             # Check queue size limits before adding
-            state = self.get_voice_state(ctx)
+            state = self.get_voice_state(mock_ctx)
             
             # Check total queue size limit
             if len(state.queue) >= self.MAX_QUEUE_SIZE:
@@ -1228,7 +1235,7 @@ class MusicCog(commands.Cog):
             await interaction.followup.send(
                 f'✅ **Added to Queue**\n'
                 f'🎵 {title} ({platform})\n'
-                f'👤 Requested by {interaction.user.mention}\n'
+                f'👤 Requested by {interaction.user.display_name}\n'
                 f'📊 Queue position: {queue_position} | Total songs: {total_songs}'
             )
 
@@ -1293,7 +1300,7 @@ class MusicCog(commands.Cog):
                 await interaction.response.send_message(
                     f"⏭️ **Song Skipped**\n"
                     f"🎵 Skipped: {current_song}\n"
-                    f"👤 Requested by {interaction.user.mention}"
+                    f'👤 Requested by {interaction.user.display_name}\n'
                 )
             else:
                 await interaction.response.send_message(
@@ -1356,7 +1363,7 @@ class MusicCog(commands.Cog):
         await interaction.response.send_message(
             f'✅ **Queue Cleared**\n'
             f'🗑️ Removed {queue_size} song(s) from queue\n'
-            f'👤 Requested by {interaction.user.mention}'
+            f'👤 Requested by {interaction.user.display_name}\n'
         )
 
     @app_commands.command(name='leave', description='Leave the voice channel')
@@ -1395,7 +1402,7 @@ class MusicCog(commands.Cog):
             response = f"👋 **Left Voice Channel**\n✅ Successfully disconnected"
             if status_info:
                 response += "\n" + "\n".join(status_info)
-            response += f"\n👤 Requested by {interaction.user.mention}"
+            response += f'👤 Requested by {interaction.user.display_name}\n'
             
             await interaction.response.send_message(response)
             logger.info(f"Left voice channel in {interaction.guild.name} (requested by {interaction.user.name})")
@@ -1724,4 +1731,3 @@ class MusicCog(commands.Cog):
         # Remove any extra whitespace and trim
         result = re.sub(r'\s+', ' ', result).strip()
         
-        return result 
