@@ -1268,8 +1268,8 @@ class MockContext:
     async def _create_audio_source(self, audio_url: str) -> discord.FFmpegOpusAudio:
         """Create an audio source from the given URL."""
         ffmpeg_options = {
-            'options': '-vn -b:a 128k -bufsize 256k -ar 48000 -af loudnorm=I=-16:TP=-1.5:LRA=11',
-            'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -timeout 60000000'
+            'options': '-vn -b:a 128k -bufsize 1024k -maxrate 192k -ar 48000 -ac 2 -af loudnorm=I=-16:TP=-1.5:LRA=11 -fflags +genpts -thread_queue_size 1024',
+            'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -reconnect_at_eof 1 -timeout 60000000 -multiple_requests 1'
         }
         
         return await discord.FFmpegOpusAudio.from_probe(

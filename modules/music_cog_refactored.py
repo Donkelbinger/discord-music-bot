@@ -103,7 +103,7 @@ class MusicCog(commands.Cog):
             await interaction.followup.send(
                 f'✅ **Added to Queue**\n'
                 f'🎵 {title} ({platform})\n'
-                f'👤 Requested by {interaction.user.mention}\n'
+                f'👤 Requested by {interaction.user.display_name}\n'
                 f'📊 Queue position: {queue_position} | Total songs: {total_songs}'
             )
             
@@ -140,7 +140,7 @@ class MusicCog(commands.Cog):
                     await interaction.response.send_message(
                         f"⏭️ **Song Skipped**\n"
                         f"🎵 Skipped: {current_song}\n"
-                        f"👤 Requested by {interaction.user.mention}"
+                        f"👤 Requested by {interaction.user.display_name}"
                     )
                 else:
                     await interaction.response.send_message(
@@ -219,7 +219,7 @@ class MusicCog(commands.Cog):
             await interaction.response.send_message(
                 f'✅ **Queue Cleared**\n'
                 f'🗑️ Removed {queue_size} song(s) from queue\n'
-                f'👤 Requested by {interaction.user.mention}'
+                f'👤 Requested by {interaction.user.display_name}'
             )
             
         except Exception as e:
@@ -422,7 +422,7 @@ class MusicCog(commands.Cog):
             response = (
                 f"👋 **Disconnected**\n"
                 f"✅ Left voice channel and cleared queue\n"
-                f"👤 Requested by {interaction.user.mention}"
+                f"👤 Requested by {interaction.user.display_name}"
             )
             
             await interaction.response.send_message(response)
