@@ -181,7 +181,7 @@ class VoiceState:
         """Send a message with information about the current song."""
         try:
             self.current_message = await self.ctx.channel.send(
-                f"🎵 Now playing: **{self.current_title}** (requested by {self.current_requester.name})"
+                f"🎵 Now playing: **{self.current_title}** (requested by {self.current_requester.display_name})"
             )
         except discord.HTTPException as e:
             logger.error(f"Failed to send now playing message: {e}")

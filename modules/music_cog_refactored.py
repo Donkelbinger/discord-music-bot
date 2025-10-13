@@ -242,7 +242,7 @@ class MusicCog(commands.Cog):
             await interaction.response.send_message(
                 f"✅ **Song Removed**\n"
                 f"🗑️ Removed: {title}\n"
-                f"👤 Originally requested by {requester.name}\n"
+                f"👤 Originally requested by {requester.display_name}\n"
                 f"🔢 Position: {position}"
             )
             

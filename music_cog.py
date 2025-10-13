@@ -19,6 +19,7 @@ import time
 import json
 from pathlib import Path
 import aiofiles
+import subprocess
 
 load_dotenv()
 logger = logging.getLogger('MusicCog')
@@ -1483,7 +1484,62 @@ class MusicCog(commands.Cog):
         embed = self._create_help_embed()
         await interaction.response.send_message(embed=embed)
         
-    def _create_help_embed(self) -> discord.Embed:
+    @app_commands.command(name='version', description='Show the current bot version and git commit')
+    async def version(self, interaction: discord.Interaction):
+        """Shows the current bot version and git commit information"""
+        try:
+            import subprocess
+            import os
+            
+            # Get git commit hash
+            try:
+                commit_hash = subprocess.check_output(['git', 'rev-parse', 'HEAD'], 
+                                                   cwd=os.path.dirname(__file__), 
+                                                   text=True).strip()[:8]  # Short hash
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                commit_hash = 'Unknown'
+            
+            # Get git commit date and message
+            try:
+                commit_info = subprocess.check_output(['git', 'log', '-1', '--format=%ad - %s', '--date=short'], 
+                                                    cwd=os.path.dirname(__file__), 
+                                                    text=True).strip()
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                commit_info = 'Unknown'
+            
+            # Get git branch
+            try:
+                branch = subprocess.check_output(['git', 'branch', '--show-current'], 
+                                               cwd=os.path.dirname(__file__), 
+                                               text=True).strip()
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                branch = 'Unknown'
+            
+            embed = discord.Embed(
+                title="🤖 Bot Version Information",
+                color=discord.Color.green()
+            )
+            
+            embed.add_field(name="📦 Version", value=f"`{commit_hash}`", inline=True)
+            embed.add_field(name="🌿 Branch", value=f"`{branch}`", inline=True)
+            embed.add_field(name="📅 Last Commit", value=f"`{commit_info}`", inline=False)
+            embed.add_field(name="🔄 Status", value="Running with auto-deployment", inline=False)
+            
+            embed.set_footer(text=f"Requested by {interaction.user.display_name}")
+            
+            await interaction.response.send_message(embed=embed)
+            
+        except Exception as e:
+            await self._handle_error(
+                error=e,
+                error_type=ErrorType.SYSTEM,
+                context_info=f'version command in guild: {interaction.guild.name}',
+                interaction=interaction,
+                user_message=f'Failed to retrieve version information'
+            )
+
+
+        def _create_help_embed(self) -> discord.Embed:
         """Create the help embed with all commands and descriptions."""
         embed = discord.Embed(
             title="🎵 Music Bot Commands",
@@ -1731,3 +1787,86 @@ class MusicCog(commands.Cog):
         # Remove any extra whitespace and trim
         result = re.sub(r'\s+', ' ', result).strip()
         
+        return result
+
+    @app_commands.command(name='version', description='Display bot version and git commit information')
+    async def version(self, interaction: discord.Interaction):
+        """Display version information including git commit hash"""
+        await interaction.response.defer()
+        
+        try:
+            # Get git commit hash
+            try:
+                git_hash = subprocess.check_output(
+                    ['git', 'rev-parse', 'HEAD'], 
+                    cwd=os.path.dirname(__file__),
+                    stderr=subprocess.DEVNULL,
+                    text=True
+                ).strip()
+                short_hash = git_hash[:7]
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                git_hash = "unknown"
+                short_hash = "unknown"
+            
+            # Get git branch
+            try:
+                git_branch = subprocess.check_output(
+                    ['git', 'rev-parse', '--abbrev-ref', 'HEAD'],
+                    cwd=os.path.dirname(__file__),
+                    stderr=subprocess.DEVNULL,
+                    text=True
+                ).strip()
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                git_branch = "unknown"
+            
+            # Get commit date
+            try:
+                commit_date = subprocess.check_output(
+                    ['git', 'show', '-s', '--format=%ci', 'HEAD'],
+                    cwd=os.path.dirname(__file__),
+                    stderr=subprocess.DEVNULL,
+                    text=True
+                ).strip()
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                commit_date = "unknown"
+            
+            # Create version embed
+            embed = discord.Embed(
+                title="🤖 Discord Music Bot Version",
+                color=0x3498db,
+                timestamp=discord.utils.utcnow()
+            )
+            
+            embed.add_field(
+                name="📋 Git Information",
+                value=f"**Commit:** `{short_hash}`\n**Branch:** `{git_branch}`\n**Date:** `{commit_date}`",
+                inline=False
+            )
+            
+            # Add bot runtime info
+            embed.add_field(
+                name="⚡ Runtime",
+                value=f"**Python:** `{'.'.join(map(str, (3, 9)))}`\n**discord.py:** `{discord.__version__}`",
+                inline=True
+            )
+            
+            # Add guild count
+            guild_count = len(self.bot.guilds)
+            embed.add_field(
+                name="📊 Stats",
+                value=f"**Servers:** `{guild_count}`\n**Active Queues:** `{len(self.voice_states)}`",
+                inline=True
+            )
+            
+            embed.set_footer(text=f"Requested by {interaction.user.display_name}")
+            
+            await interaction.followup.send(embed=embed)
+            
+        except Exception as e:
+            await self._handle_error(
+                error=e,
+                error_type=ErrorType.COMMAND,
+                context_info=f"version command in guild: {interaction.guild.name if interaction.guild else 'DM'}",
+                interaction=interaction,
+                user_message="Failed to retrieve version information"
+            )
