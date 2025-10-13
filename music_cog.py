@@ -1118,11 +1118,11 @@ class MusicCog(commands.Cog):
             return
 
         # Create mock context for compatibility with get_voice_state
-class MockContext:
-    def __init__(self, guild, voice_client, channel):
-        self.guild = guild
-        self.voice_client = voice_client
-        self.channel = channel
+        class MockContext:
+            def __init__(self, guild, voice_client, channel):
+                self.guild = guild
+                self.voice_client = voice_client
+                self.channel = channel
 
         mock_ctx = MockContext(interaction.guild, voice_client, interaction.channel)
         try:
